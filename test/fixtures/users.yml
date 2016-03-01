@@ -1,0 +1,4 @@
+joel:
+  name: Joel Kopp
+  email: jkopp@mkei.org
+  password_digest: <%= User.digest('password') %>
