@@ -23,8 +23,13 @@
         </li>
         <% if logged_in? %>
           <li>
+            <%= link_to users_path do %>
+              <span class="glyphicon glyphicon-list"></span> Users
+            <% end %>
+          </li>
+          <li>
             <%= link_to '#' do %>
-              <span class="glyphicon glyphicon-list"></span> Jobs
+              <span class="glyphicon glyphicon-tasks"></span> Jobs
             <% end %>
           </li>
           <li>
@@ -44,7 +49,7 @@
                 <% end %>
               </li>
               <li>
-                <%= link_to '#' do %>
+                <%= link_to edit_user_path(current_user) do %>
                   <span class="glyphicon glyphicon-wrench"></span> Settings
                 <% end %>
               </li>

@@ -1,0 +1,8 @@
+<% provide(:title, 'All users') %>
+<h3>All users</h3>
+<%= paginate @users %>
+<p><%= page_entries_info @users, entry_name: 'user' %></p>
+
+<ul class="users">
+  <%= render @users %>
+</ul>

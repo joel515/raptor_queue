@@ -1,4 +1,27 @@
-joel:
-  name: Joel Kopp
-  email: jkopp@mkei.org
+daenerys:
+  name: Daenerys Targaryen
+  email: stormborn@khaleesi.com
   password_digest: <%= User.digest('password') %>
+  admin: true
+
+jon:
+  name: Jon Snow
+  email: lord_commander@nightswatch.org
+  password_digest: <%= User.digest('password') %>
+
+ned:
+  name: Ned Stark
+  email: winteriscoming@winterfell.gov
+  password_digest: <%= User.digest('password') %>
+
+hodor:
+  name: Hodor
+  email: hodor@hodor.hodor
+  password_digest: <%= User.digest('password') %>
+
+<% 30.times do |n| %>
+user_<%= n %>:
+  name:  <%= "User #{n}" %>
+  email: <%= "user-#{n}@example.com" %>
+  password_digest: <%= User.digest('password') %>
+<% end %>

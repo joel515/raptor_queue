@@ -1,24 +1,4 @@
 <% provide(:title, 'Request access') %>
+<% provide(:button_text, 'Send request') %>
 <h3>Request access</h3>
-
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <%= form_for(@user) do |f| %>
-      <%= render 'shared/error_messages' %>
-
-      <%= f.label :name %>
-      <%= f.text_field :name, class: 'form-control' %>
-
-      <%= f.label :email %>
-      <%= f.email_field :email, class: 'form-control' %>
-
-      <%= f.label :password %>
-      <%= f.password_field :password, class: 'form-control' %>
-
-      <%= f.label :password_confirmation, "Confirmation" %>
-      <%= f.password_field :password_confirmation, class: 'form-control' %>
-
-      <%= f.submit "Send request", class: "btn btn-primary" %>
-    <% end %>
-  </div>
-</div>
+<%= render 'form' %>
