@@ -1,6 +1,23 @@
-<div class="bg"></div>
-<div class="jumbotron">
-  <h1>RaptorQueue</h1>
-  <h2>Web interface to submit your job to the Milwaukee Institute's Raptor cluster.</h2>
-  <%= link_to "Request access", signup_path, class: "btn btn-lg btn-primary" %>
-</div>
+<% if logged_in? %>
+  <div class="row">
+    <aside class="col-md-4">
+      <section class="user_info">
+        <%= render 'shared/user_info' %>
+      </section>
+      <section class="job_form">
+        <%= render 'shared/job_form' %>
+      </section>
+    </aside>
+    <div class="col-md-8">
+      <h3>Job Feed</h3>
+      <%= render 'shared/feed' %>
+    </div>
+  </div>
+<% else %>
+  <div class="bg"></div>
+  <div class="jumbotron">
+    <h4>RaptorQueue</h4>
+    <h5>Web interface to submit your job to the Milwaukee Institute's Raptor cluster.</h5>
+    <%= link_to "Request access", signup_path, class: "btn btn-lg btn-primary" %>
+  </div>
+<% end %>

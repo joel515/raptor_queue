@@ -1,0 +1,46 @@
+drogon:
+  name: "Drogon"
+  created_at: <%= 10.minutes.ago %>
+  user: daenerys
+
+rhaegal:
+  name: "Rhaegal"
+  created_at: <%= 3.years.ago %>
+  user: daenerys
+
+viserion:
+  name: "Viserion"
+  created_at: <%= 2.hours.ago %>
+  user: daenerys
+
+most_recent:
+  name: "Most recent job"
+  created_at: <%= Time.zone.now %>
+  user: daenerys
+
+longclaw:
+  name: "Longclaw"
+  created_at: <%= 2.years.ago %>
+  user: jon
+
+ghost:
+  name: "Ghost"
+  created_at: <%= 3.days.ago %>
+  user: jon
+
+needle:
+  name: "Needle"
+  created_at: <%= 10.minutes.ago %>
+  user: arya
+
+nymeria:
+  name: "Nymeria"
+  created_at: <%= 4.hours.ago %>
+  user: arya
+
+<% 30.times do |n| %>
+job_<%= n %>:
+  name: <%= Faker::Lorem.sentence(1)[0...15] %>
+  created_at: <%= 42.days.ago %>
+  user: daenerys
+<% end %>

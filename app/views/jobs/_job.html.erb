@@ -1,0 +1,11 @@
+<li id="job-<%= job.id %>">
+  <span class="user"><%= link_to job.user.name, job.user %></span>
+  <span class="jobname"><%= job.name %></span>
+  <span class="timestamp">
+    Created <%= time_ago_in_words(job.created_at) %> ago.
+    <% if current_user?(job.user) %>
+      <%= link_to "delete", job, method: :delete,
+                                 data: { confirm: "Are you sure?" } %>
+    <% end %>
+  </span>
+</li>

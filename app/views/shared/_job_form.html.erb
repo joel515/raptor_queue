@@ -1,0 +1,7 @@
+<%= form_for(@job) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+  <div class="field">
+    <%= f.text_field :name, placeholder: "Job name" %>
+  </div>
+  <%= f.submit "Create", class: "btn btn-primary" %>
+<% end %>

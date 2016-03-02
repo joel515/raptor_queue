@@ -9,14 +9,14 @@ jon:
   email: lord_commander@nightswatch.org
   password_digest: <%= User.digest('password') %>
 
+arya:
+  name: Arya Stark
+  email: waterdancer@braavos.gov
+  password_digest: <%= User.digest('password') %>
+
 ned:
   name: Ned Stark
   email: winteriscoming@winterfell.gov
-  password_digest: <%= User.digest('password') %>
-
-hodor:
-  name: Hodor
-  email: hodor@hodor.hodor
   password_digest: <%= User.digest('password') %>
 
 <% 30.times do |n| %>
