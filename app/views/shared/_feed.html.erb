@@ -1,6 +1,18 @@
 <% if @feed_items.any? %>
-  <ol class="jobs">
-    <%= render @feed_items %>
-  </ol>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Solver</th>
+        <th>Nodes</th>
+        <th>PPN</th>
+        <th></th>
+      </tr>
+    </thead>
+    <%= render @feed_items, cols: { name: true, status: true, config: true,
+                                    nodes: true, processors: true,
+                                    buttons: true } %>
+  </table>
   <%= paginate @feed_items %>
 <% end %>

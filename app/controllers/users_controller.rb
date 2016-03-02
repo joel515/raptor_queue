@@ -1,10 +1,10 @@
 class UsersController < ApplicationController
   before_action :logged_in_user, only: [:edit, :update, :index, :destroy]
   before_action :correct_user,   only: [:edit, :update]
-  before_action :admin_user,     only: :destroy
+  before_action :admin_user,     only: [:index, :destroy]
 
   def index
-    if User.count > 0
+    if User.any?
       @users = User.order(:id).page params[:page]
     else
       redirect_to root_url

@@ -1,11 +1,9 @@
-<li id="job-<%= job.id %>">
-  <span class="user"><%= link_to job.user.name, job.user %></span>
-  <span class="jobname"><%= job.name %></span>
-  <span class="timestamp">
-    Created <%= time_ago_in_words(job.created_at) %> ago.
-    <% if current_user?(job.user) %>
-      <%= link_to "delete", job, method: :delete,
-                                 data: { confirm: "Are you sure?" } %>
-    <% end %>
-  </span>
-</li>
+<tr id="job-<%= job.id %>">
+  <%= content_tag(:td, job.name) if cols[:name] %>
+  <%= content_tag(:td, link_to(job.user.name, job.user)) if cols[:user] %>
+  <%= content_tag(:td, status_label(job)) if cols[:status] %>
+  <%= content_tag(:td, Job::SOLVERS[:ansys]) if cols[:config] %>
+  <%= content_tag(:td, job.nodes) if cols[:nodes] %>
+  <%= content_tag(:td, job.processors) if cols[:processors] %>
+  <%= content_tag(:td, button_group(job)) if cols[:buttons] %>
+</tr>

@@ -20,8 +20,8 @@ User.create!(name:  "Ned Stark",
              password_confirmation: "foobar")
 
 99.times do |n|
-  name  = Faker::Name.name
-  email = "facelessman-#{n+1}@halloffaces.com"
+  name  = Faker::StarWars.character
+  email = "#{name.gsub(/\s+/, '')}-#{n+1}@empire.com"
   password = "password"
   User.create!(name:  name,
                email: email,
@@ -31,6 +31,6 @@ end
 
 users = User.order(:created_at).take(6)
 50.times do
-  name = Faker::Lorem.sentence(1)[0...15]
+  name = Faker::Hacker.noun[0...15]
   users.each { |user| user.jobs.create!(name: name) }
 end

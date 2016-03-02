@@ -1,0 +1,22 @@
+<% provide(:title, "Jobs") %>
+<h1>Jobs in queue</h1>
+<p><%= page_entries_info @jobs, entry_name: 'job' %></p>
+
+<% if @jobs.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Submitter</th>
+        <th>Status</th>
+        <th>Solver</th>
+        <th>Nodes</th>
+        <th>PPN</th>
+        <th></th>
+      </tr>
+    </thead>
+    <%= render @jobs, cols: { user: true, name: true, status: true,
+                              config: true, nodes: true, processors: true } %>
+  </table>
+  <%= paginate @jobs %>
+<% end %>

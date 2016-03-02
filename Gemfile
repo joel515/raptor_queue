@@ -51,6 +51,6 @@ group :production do
   gem 'puma', '2.11.1'
 end
 
-gem 'bootstrap-sass', '3.2.0.0'
-gem 'faker', '1.4.2'
+gem 'bootstrap-sass', '3.3.6'
+gem 'faker', '1.6.3'
 gem 'kaminari', '0.16.3'
