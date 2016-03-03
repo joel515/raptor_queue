@@ -44,5 +44,5 @@ end
 users = User.order(:created_at).take(6)
 50.times do
   name = Faker::Hacker.noun[0...15]
-  users.each { |user| user.jobs.create!(name: name) }
+  users.each { |user| user.jobs.create!(name: name, status: "Completed") }
 end

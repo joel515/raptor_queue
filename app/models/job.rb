@@ -32,8 +32,9 @@ class Job < ActiveRecord::Base
   validates_inclusion_of :status, in: JOB_STATUS.values
 
   SOLVERS = {
-    elmer: "Elmer",
-    ansys: "Ansys"
+    elmer:   "Elmer",
+    ansys:   "Ansys",
+    starccm: "STAR-CCM+"
   }
 
   MAX_PPN = 16
