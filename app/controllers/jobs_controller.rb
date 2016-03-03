@@ -10,6 +10,10 @@ class JobsController < ApplicationController
     end
   end
 
+  def new
+    @job = Job.new
+  end
+
   def create
     @job = current_user.jobs.build(job_params)
     if @job.save
