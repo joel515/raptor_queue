@@ -4,7 +4,8 @@ class JobTest < ActiveSupport::TestCase
 
   def setup
     @user = users(:daenerys)
-    @job = @user.jobs.build(name: "Drogon")
+    @job = @user.jobs.build(name: "Drogon", nodes: 1, processors: 1,
+                            config: "ansys")
   end
 
   test "should be valid" do

@@ -2,7 +2,7 @@ class StaticPagesController < ApplicationController
   def home
     if logged_in?
       @job = current_user.jobs.build
-      @feed_items = current_user.feed.order(:id).page params[:page]
+      @feed_items = current_user.feed.order(:created_at).page params[:page]
     end
   end
 

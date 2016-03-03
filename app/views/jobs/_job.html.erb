@@ -2,7 +2,7 @@
   <%= content_tag(:td, job.name) if cols[:name] %>
   <%= content_tag(:td, link_to(job.user.name, job.user)) if cols[:user] %>
   <%= content_tag(:td, status_label(job)) if cols[:status] %>
-  <%= content_tag(:td, Job::SOLVERS[:ansys]) if cols[:config] %>
+  <%= content_tag(:td, Job::SOLVERS[job.config.to_sym]) if cols[:config] %>
   <%= content_tag(:td, job.nodes) if cols[:nodes] %>
   <%= content_tag(:td, job.processors) if cols[:processors] %>
   <%= content_tag(:td, button_group(job)) if cols[:buttons] %>

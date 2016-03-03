@@ -12,13 +12,14 @@ class JobsInterfaceTest < ActionDispatch::IntegrationTest
     assert_select 'ul.pagination'
     # Invalid submission
     assert_no_difference 'Job.count' do
-      post jobs_path, job: { name: "" }
+      post jobs_path, job: { name: "", nodes: 0, config: "minesweeper" }
     end
     assert_select 'div#error_explanation'
     # Valid submission
     name = "Grey worm"
     assert_difference 'Job.count', 1 do
-      post jobs_path, job: { name: name }
+      post jobs_path, job: { name: name, nodes: 1, processors: 1,
+                             config: "ansys" }
     end
     assert_redirected_to root_url
     follow_redirect!

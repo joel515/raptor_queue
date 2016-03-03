@@ -2,45 +2,81 @@ drogon:
   name: "Drogon"
   created_at: <%= 10.minutes.ago %>
   user: daenerys
+  status: "Completed"
+  nodes: 1
+  processors: 1
+  config: "starccm"
 
 rhaegal:
   name: "Rhaegal"
   created_at: <%= 3.years.ago %>
   user: daenerys
+  status: "Completed"
+  nodes: 1
+  processors: 1
+  config: "starccm"
 
 viserion:
   name: "Viserion"
   created_at: <%= 2.hours.ago %>
   user: daenerys
+  status: "Completed"
+  nodes: 1
+  processors: 1
+  config: "starccm"
 
 most_recent:
   name: "Most recent job"
   created_at: <%= Time.zone.now %>
   user: daenerys
+  status: "Completed"
+  nodes: 1
+  processors: 1
+  config: "starccm"
 
 longclaw:
   name: "Longclaw"
   created_at: <%= 2.years.ago %>
   user: jon
+  status: "Completed"
+  nodes: 1
+  processors: 1
+  config: "starccm"
 
 ghost:
   name: "Ghost"
   created_at: <%= 3.days.ago %>
   user: jon
+  status: "Completed"
+  nodes: 1
+  processors: 1
+  config: "starccm"
 
 needle:
   name: "Needle"
   created_at: <%= 10.minutes.ago %>
   user: arya
+  status: "Completed"
+  nodes: 1
+  processors: 1
+  config: "starccm"
 
 nymeria:
   name: "Nymeria"
   created_at: <%= 4.hours.ago %>
   user: arya
+  status: "Completed"
+  nodes: 1
+  processors: 1
+  config: "starccm"
 
 <% 30.times do |n| %>
 job_<%= n %>:
   name: <%= Faker::Lorem.sentence(1)[0...15] %>
   created_at: <%= 42.days.ago %>
   user: daenerys
+  status: "Completed"
+  nodes: 1
+  processors: 1
+  config: "starccm"
 <% end %>

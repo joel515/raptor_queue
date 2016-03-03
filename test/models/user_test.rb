@@ -81,7 +81,8 @@ class UserTest < ActiveSupport::TestCase
 
   test "associated jobs should be destroyed" do
     @user.save
-    @user.jobs.create!(name: "Test job")
+    @user.jobs.create!(name: "Test job", nodes: 1, processors: 1,
+                       config: "elmer")
     assert_difference 'Job.count', -1 do
       @user.destroy
     end

@@ -45,7 +45,8 @@ class JobsController < ApplicationController
   private
 
     def job_params
-      params.require(:job).permit(:name)
+      params.require(:job).permit(:name, :nodes, :processors, :config,
+                                  :inputfile)
     end
 
     def correct_user

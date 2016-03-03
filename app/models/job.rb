@@ -1,9 +1,11 @@
 class Job < ActiveRecord::Base
   belongs_to :user
+  mount_uploader :inputfile, InputFileUploader
   default_scope -> { order(created_at: :desc) }
   validates :user_id,    presence: true
   validates :name,       presence: true, length: { maximum: 15 }
   validates :status,     presence: true
+  validates :config,     presence: true
   validates :processors, presence: true,
                          numericality: { only_integer: true,
                                          greater_than_or_equal_to: 1,
@@ -36,6 +38,8 @@ class Job < ActiveRecord::Base
     ansys:   "Ansys",
     starccm: "STAR-CCM+"
   }
+
+  validates_inclusion_of :config, in: SOLVERS.keys.map(&:to_s)
 
   MAX_PPN = 16
   MAX_NODE = 32
