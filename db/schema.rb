@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160302175825) do
+ActiveRecord::Schema.define(version: 20160303154232) do
 
   create_table "jobs", force: :cascade do |t|
     t.string   "pid"
@@ -37,6 +37,8 @@ ActiveRecord::Schema.define(version: 20160302175825) do
     t.string   "password_digest"
     t.string   "remember_digest"
     t.boolean  "admin",           default: false
+    t.string   "company"
+    t.string   "username"
   end
 
 end

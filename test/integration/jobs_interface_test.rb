@@ -23,14 +23,15 @@ class JobsInterfaceTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_url
     follow_redirect!
     assert_match name, response.body
-    # Delete a post.
-    assert_select 'a', text: 'delete'
+    # Delete a job.
     first_job = @user.jobs.page(1).first
+    assert_select "a[href=?][data-method='delete']", job_path(first_job)
     assert_difference 'Job.count', -1 do
       delete job_path(first_job)
     end
     # Visit a different user.
     get user_path(users(:jon))
-    assert_select 'a', text: 'delete', count: 0
+    assert_select "a[href=?][data-method='delete']", job_path(first_job),
+      count: 0
   end
 end
