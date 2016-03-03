@@ -1,6 +1,7 @@
 class Job < ActiveRecord::Base
   belongs_to :user
   mount_uploader :inputfile, InputFileUploader
+  before_destroy :delete_staging_directories
   default_scope -> { order(created_at: :desc) }
   validates :user_id,    presence: true
   validates :name,       presence: true, length: { maximum: 15 }
@@ -43,6 +44,21 @@ class Job < ActiveRecord::Base
 
   MAX_PPN = 16
   MAX_NODE = 32
+
+  def configure_concern
+    case config
+    when "elmer"
+      extend ElmerJob
+    when "ansys"
+      extend AnsysJob
+    else
+      extend ElmerJob
+    end
+  end
+
+  def prefix
+    name.gsub(/\s+/, "").downcase
+  end
 
   # Job status queries.
   def running?
@@ -99,22 +115,91 @@ class Job < ActiveRecord::Base
   # Submit the job.  Use qsub if using PBS scheduler.  Otherwise run the bash
   # script.  If the latter, capture the group id from the process spawned.
   def submit
-    # configure_concern
-    # submit_job
+    configure_concern
+    submit_job
   end
 
   # Check the job's status.  Use qstat if submitted via PBS, otherwise check
   # the child PIDs from the submitted group PID.
   def check_status
-    # return status if pid.nil?
+    return status if pid.nil?
 
-    # pre_status = `#{check_status_command}`
-    # unless pre_status.nil? || pre_status.empty?
-    #   state = check_process_status(pre_status)
-    #   completed?(state) ? check_completed_status : state
-    # else
-    #   failed? ? status : check_completed_status
-    # end
-    status
+    pre_status = `#{check_status_command}`
+    unless pre_status.nil? || pre_status.empty?
+      state = check_process_status(pre_status)
+      completed?(state) ? check_completed_status : state
+    else
+      failed? ? status : check_completed_status
+    end
   end
+
+  def set_status(arg)
+    if arg.is_a? String
+      self.status = JOB_STATUS.has_value?(arg) ? arg : JOB_STATUS[:k]
+    elsif arg.is_a? Symbol
+      self.status = JOB_STATUS.has_key?(arg) ? JOB_STATUS[arg] : JOB_STATUS[:k]
+    else
+      self.status = JOB_STATUS[:k]
+    end
+  end
+
+  def set_status!(arg)
+    set_status(arg)
+    self.save
+  end
+
+  # Kill the job.  If running with scheduler, submit qdel command.  Otherwise,
+  # submit a SIGTERM to the process group.
+  def kill
+    unless pid.nil?
+      `qdel #{pid}`
+      set_status! :m
+    end
+  end
+
+  def delete_staging_directories
+    if !jobdir.nil?
+      jobpath = Pathname.new(jobdir)
+      if jobpath.directory?
+        jobpath.rmtree
+      end
+    end
+  end
+
+  def stats
+    configure_concern
+    job_stats
+  end
+
+  def stdout
+    jobpath = Pathname.new(jobdir)
+    jobpath + "#{prefix}.o#{pid.split('.')[0]}"
+  end
+
+  private
+
+    def check_process_status(pre_status)
+      JOB_STATUS[Nokogiri::XML(pre_status).xpath( \
+        '//Data/Job/job_state').children.first.content.downcase.to_sym] \
+        || JOB_STATUS[:k]
+    end
+
+    def check_status_command
+      "qstat #{pid} -x"
+    end
+
+    def check_completed_status
+      configure_concern
+      std_out = stdout
+
+      if std_out.exist?
+        if output_ok? std_out
+            JOB_STATUS[:c]
+        else
+          JOB_STATUS[:f]
+        end
+      else
+        JOB_STATUS[:f]
+      end
+    end
 end

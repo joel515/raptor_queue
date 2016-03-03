@@ -1,6 +1,6 @@
 class JobsController < ApplicationController
   before_action :logged_in_user, only: [:create, :destroy]
-  before_action :correct_user,   only: :destroy
+  before_action :correct_user,   only: [:create, :destroy]
 
   def index
     if Job.any?
@@ -17,7 +17,13 @@ class JobsController < ApplicationController
   def create
     @job = current_user.jobs.build(job_params)
     if @job.save
-      flash[:success] = "Job created!"
+      @job.submit if @job.ready?
+      if @job.submitted?
+        flash[:success] = "Simulation for #{@job.name} successfully submitted!"
+      else
+        flash[:danger] = "Submission for #{@job.name} failed."
+      end
+
       redirect_to root_url
     else
       @feed_items = []
@@ -27,7 +33,7 @@ class JobsController < ApplicationController
 
   def destroy
     @job.destroy
-    flash[:success] = "Job deleted"
+    flash[:success] = "Job deleted."
     redirect_to request.referrer || root_url
   end
 
