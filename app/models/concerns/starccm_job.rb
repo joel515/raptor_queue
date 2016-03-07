@@ -1,8 +1,10 @@
-module AnsysJob
+module StarccmJob
   extend ActiveSupport::Concern
   # validates :inputfile, presence: true
 
-  ANSYS_EXE = "/gpfs/apps/ansys/v162/ansys/bin/ansys162"
+  LICPATH = "1999@flex.cd-adapco.com"
+  PODKEY = "***REMOVED***"
+  VERSION = "10.06.010"
 
   # Capture the job stats and return the data as a hash.
   def job_stats
@@ -10,14 +12,14 @@ module AnsysJob
     std_out = jobpath + "#{prefix}.o#{pid.split('.')[0]}"
 
     nodes, elements, cputime, walltime = nil
-    if std_out.exist?
-      File.foreach(std_out) do |line|
-        nodes    = line.split[4] if line.include? "MAXIMUM NODE NUMBER"
-        elements = line.split[4] if line.include? "MAXIMUM ELEMENT NUMBER"
-        cputime  = "#{line.split[5]} s" if line.include? "CP Time"
-        walltime = "#{line.split[5]} s" if line.include? "Elapsed Time"
-      end
-    end
+    # if std_out.exist?
+    #   File.foreach(std_out) do |line|
+    #     nodes    = line.split[4] if line.include? "MAXIMUM NODE NUMBER"
+    #     elements = line.split[4] if line.include? "MAXIMUM ELEMENT NUMBER"
+    #     cputime  = "#{line.split[5]} s" if line.include? "CP Time"
+    #     walltime = "#{line.split[5]} s" if line.include? "Elapsed Time"
+    #   end
+    # end
     Hash["Number of Nodes" => nodes,
          "Number of Elements" => elements,
          "CPU Time" => cputime,
@@ -59,7 +61,7 @@ module AnsysJob
     # 3D visualization plots of the results using Paraview (batch).
     def generate_submit_script(args)
       jobpath = Pathname.new(jobdir)
-      input_deck = inputfile_identifier
+      simname = File.basename(args[:input_deck],File.extname(args[:input_deck]))
       submit_script = jobpath + "#{prefix}.sh"
       shell_cmd = `which bash`.strip
       File.open(submit_script, 'w') do |f|
@@ -69,23 +71,27 @@ module AnsysJob
         f.puts "#PBS -N #{prefix}"
         f.puts "#PBS -l nodes=#{nodes}:ppn=#{processors}"
         f.puts "#PBS -j oe"
-        f.puts "module load openmpi/gcc/64/1.10.1"
-        f.puts "machines=`uniq -c ${PBS_NODEFILE} | " \
-          "awk '{print $2 \":\" $1}' | paste -s -d ':'`"
+        f.puts "#PBS -m ae"
+        f.puts "#PBS -M #{user.email}"
+
+        f.puts "module add starccm+/#{VERSION}"
+        f.puts "numprocs=`wc -l $PBS_NODEFILE | cut -f1 -d \" \"`"
+
         f.puts "cd ${PBS_O_WORKDIR}"
-        f.puts "#{ANSYS_EXE} -b -dis -machines $machines -i #{input_deck}"
+        f.puts "starccm+ -batch -np $numprocs -machinefile $PBS_NODEFILE " \
+          "-power -podkey #{PODKEY} -licpath #{LICPATH} -pio -time -rsh ssh " \
+          "#{simname}"
       end
 
       submit_script.exist? ? submit_script : nil
     end
 
     def output_ok?(std_out)
-      errors = nil
+      errors = false
       File.foreach(std_out) do |line|
-        errors = line.split[5].to_i if line.include? \
-          "NUMBER OF ERROR   MESSAGES ENCOUNTERED="
+        errors = line.include? "error: Server Error"
       end
 
-      !errors.nil? && errors == 0
+      !errors
     end
 end

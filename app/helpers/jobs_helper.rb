@@ -4,7 +4,7 @@ module JobsHelper
 
     if job
       status = job.check_status
-      # job.set_status! status if status != job.status
+      job.set_status! status if status != job.status
 
       if job.completed?
         label_class = "label-success"
@@ -22,7 +22,7 @@ module JobsHelper
     "<span class=\"label #{label_class}\">#{text}</span>".html_safe
   end
 
-    def button(job, type, opts = { text: false, size: 'btn-xs',
+  def button(job, type, opts = { text: false, size: 'btn-xs',
     disabled: false })
 
     if type == :submit

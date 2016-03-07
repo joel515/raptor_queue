@@ -1,5 +1,6 @@
 class Job < ActiveRecord::Base
   belongs_to :user
+  after_create :create_staging_directories!
   mount_uploader :inputfile, InputFileUploader
   before_destroy :delete_staging_directories
   default_scope -> { order(created_at: :desc) }
@@ -15,6 +16,8 @@ class Job < ActiveRecord::Base
                          numericality: { only_integer: true,
                                          greater_than_or_equal_to: 1,
                                          less_than_or_equal_to: 32 }
+
+  HOME = "/gpfs/home"
 
   JOB_STATUS = {
     u: "Unsubmitted",
@@ -47,8 +50,8 @@ class Job < ActiveRecord::Base
 
   def configure_concern
     case config
-    when "elmer"
-      extend ElmerJob
+    when "starccm"
+      extend StarccmJob
     when "ansys"
       extend AnsysJob
     else
@@ -84,7 +87,6 @@ class Job < ActiveRecord::Base
 
   def ready
     self.pid = nil
-    self.jobdir = nil
     set_status! :u
   end
 
@@ -177,6 +179,24 @@ class Job < ActiveRecord::Base
   end
 
   private
+
+    def create_staging_directories!
+      create_staging_directories
+      self.save
+    end
+
+    def create_staging_directories
+      homedir = Pathname.new(HOME) + user.username
+      return nil unless homedir.directory?
+
+      scratchdir = homedir + "Scratch"
+      Dir.mkdir(scratchdir) unless scratchdir.directory?
+
+      stagedir = scratchdir + id.to_s
+      Dir.mkdir(stagedir) unless stagedir.directory?
+
+      self.jobdir = stagedir.to_s
+    end
 
     def check_process_status(pre_status)
       JOB_STATUS[Nokogiri::XML(pre_status).xpath( \
