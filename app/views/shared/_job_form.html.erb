@@ -30,5 +30,8 @@
         <%= f.file_field :inputfile, class: "#{control}", placeholder: "Input file" %>
       </div>
     </div>
-  <%= f.submit "Submit", class: "btn btn-primary" %>
+    <div class="form-group">
+      <%= f.submit "Submit", class: "btn btn-primary", data:
+        {disable_with: "Submitting..."} %>
+    </div>
 <% end %>
