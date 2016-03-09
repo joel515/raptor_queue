@@ -6,17 +6,18 @@
   <table class="table">
     <thead>
       <tr>
-        <th>Name</th>
+        <th>Job id</th>
         <th>Submitter</th>
         <th>Status</th>
         <th>Solver</th>
         <th>Nodes</th>
         <th>PPN</th>
-        <th></th>
+        <th>Submitted at</th>
       </tr>
     </thead>
-    <%= render @jobs, cols: { user: true, name: true, status: true,
-                              config: true, nodes: true, processors: true } %>
+    <%= render @jobs, cols: { user: true, id: true, status: true,
+                              config: true, nodes: true, processors: true,
+                              submitted_at: true } %>
   </table>
   <%= paginate @jobs %>
 <% end %>

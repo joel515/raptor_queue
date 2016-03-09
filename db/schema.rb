@@ -11,20 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303214916) do
+ActiveRecord::Schema.define(version: 20160308162736) do
 
   create_table "jobs", force: :cascade do |t|
     t.string   "pid"
     t.string   "jobdir"
-    t.string   "status",     default: "Unsubmitted"
+    t.string   "status",       default: "Unsubmitted"
     t.string   "config"
     t.integer  "nodes"
     t.integer  "processors"
     t.integer  "user_id"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.string   "name"
     t.string   "inputfile"
+    t.string   "submitted_at", default: "---"
   end
 
   add_index "jobs", ["user_id", "created_at"], name: "index_jobs_on_user_id_and_created_at"

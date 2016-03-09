@@ -2,6 +2,7 @@
   <table class="table">
     <thead>
       <tr>
+        <th>Id</th>
         <th>Name</th>
         <th>Status</th>
         <th>Solver</th>
@@ -10,9 +11,9 @@
         <th></th>
       </tr>
     </thead>
-    <%= render @feed_items, cols: { name: true, status: true, config: true,
-                                    nodes: true, processors: true,
-                                    buttons: true } %>
+    <%= render @feed_items, cols: { id: true, name: true, status: true,
+                                    config: true, nodes: true,
+                                    processors: true, buttons: true } %>
   </table>
   <%= paginate @feed_items %>
 <% end %>

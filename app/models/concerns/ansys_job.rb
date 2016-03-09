@@ -46,9 +46,11 @@ module AnsysJob
       # If successful, set the status to "Submitted" and save to database.
       unless pid.nil? || pid.empty?
         self.pid = pid.strip
+        self.submitted_at = Time.new.ctime
         set_status! :b
       else
         self.pid = nil
+        self.submitted_at = '---'
         set_status! :f
       end
     end
@@ -69,6 +71,9 @@ module AnsysJob
         f.puts "#PBS -N #{prefix}"
         f.puts "#PBS -l nodes=#{nodes}:ppn=#{processors}"
         f.puts "#PBS -j oe"
+        f.puts "#PBS -m ae"
+        f.puts "#PBS -M #{user.email}"
+
         f.puts "module load openmpi/gcc/64/1.10.1"
         f.puts "machines=`uniq -c ${PBS_NODEFILE} | " \
           "awk '{print $2 \":\" $1}' | paste -s -d ':'`"

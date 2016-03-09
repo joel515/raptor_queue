@@ -48,9 +48,11 @@ module StarccmJob
       # If successful, set the status to "Submitted" and save to database.
       unless pid.nil? || pid.empty?
         self.pid = pid.strip
+        self.submitted_at = Time.new.ctime
         set_status! :b
       else
         self.pid = nil
+        self.submitted_at = '---'
         set_status! :f
       end
     end
