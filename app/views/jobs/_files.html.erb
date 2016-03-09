@@ -1,0 +1,6 @@
+<% Dir["#{job.jobdir}/*"].each do |file| %>
+  <tr>
+    <%= content_tag(:td, File.basename(file), class:"col-xs-8") %>
+    <%= content_tag(:td, filesize_pretty(File.size(file), 2), class:"col-xs-4") %>
+  </tr>
+<% end %>

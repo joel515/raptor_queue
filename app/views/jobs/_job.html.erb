@@ -1,6 +1,10 @@
 <tr id="job-<%= job.id %>">
   <%= content_tag(:td, job.id) if cols[:id] %>
-  <%= content_tag(:td, job.name) if cols[:name] %>
+  <% if current_user? job.user %>
+    <%= content_tag(:td, link_to(job.name, job)) if cols[:name] %>
+  <% else %>
+    <%= content_tag(:td, job.name) if cols[:name] %>
+  <% end %>
   <%= content_tag(:td, link_to(job.user.name, job.user)) if cols[:user] %>
   <%= content_tag(:td, status_label(job)) if cols[:status] %>
   <%= content_tag(:td, Job::SOLVERS[job.config.to_sym]) if cols[:config] %>

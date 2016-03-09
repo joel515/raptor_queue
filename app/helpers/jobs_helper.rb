@@ -118,4 +118,14 @@ module JobsHelper
     div += "</div>"
     div.html_safe
   end
+
+  def filesize_pretty(size, precision)
+    case
+    when size == 1 ; "1 Byte"
+    when size < 1E3 ; "#{size} Bytes"
+    when size < 1E6 ; "%.#{precision}f KB" % (size / 1E3)
+    when size < 1E9 ; "%.#{precision}f MB" % (size / 1E6)
+    else "%.#{precision}f GB" % (size / 1E9)
+    end
+  end
 end
