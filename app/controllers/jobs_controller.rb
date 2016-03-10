@@ -1,7 +1,7 @@
 class JobsController < ApplicationController
   before_action :logged_in_user, only: [:create, :destroy]
   before_action :correct_user,   only: [:destroy]
-  before_action :set_job,        only: [:submit, :kill, :show]
+  before_action :set_job,        only: [:submit, :kill, :show, :clean]
 
   def index
     if Job.any?
@@ -56,6 +56,19 @@ class JobsController < ApplicationController
   end
 
   def clean
+    if @job.cleanable?
+      @job.clean_staging_directories
+      @job.ready
+      flash[:success] = "Job directory successfully deleted."
+    else
+      flash[:danger] = "Job cannot be cleaned at this time."
+    end
+
+    # if request.referrer.include? results_beam_path
+    #   redirect_to @job
+    # else
+      redirect_to request.referrer || index_url
+    # end
   end
 
   def download

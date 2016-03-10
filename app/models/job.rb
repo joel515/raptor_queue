@@ -159,8 +159,20 @@ class Job < ActiveRecord::Base
     end
   end
 
+  def clean_staging_directories
+    unless jobdir.nil?
+      jobpath = Pathname.new(jobdir)
+      if jobpath.directory?
+        jobpath.children.each do |f|
+          f.rmtree if f.directory?
+          f.delete unless f.eql? Pathname.new(inputfile.path)
+        end
+      end
+    end
+  end
+
   def delete_staging_directories
-    if !jobdir.nil?
+    unless jobdir.nil?
       jobpath = Pathname.new(jobdir)
       if jobpath.directory?
         jobpath.rmtree
