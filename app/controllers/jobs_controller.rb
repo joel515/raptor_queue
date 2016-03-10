@@ -58,6 +58,12 @@ class JobsController < ApplicationController
   def clean
   end
 
+  def download
+    send_file(params[:file], filename: File.basename(params[:file]),
+                             disposition: 'attachment',
+                             type: 'application/octet-stream')
+  end
+
   private
 
     def job_params

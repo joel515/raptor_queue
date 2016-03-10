@@ -1,6 +1,13 @@
 <% Dir["#{job.jobdir}/*"].each do |file| %>
   <tr>
-    <%= content_tag(:td, File.basename(file), class:"col-xs-8") %>
-    <%= content_tag(:td, filesize_pretty(File.size(file), 2), class:"col-xs-4") %>
+    <%= content_tag(:td, File.basename(file), class:"col-xs-5") %>
+    <%= content_tag(:td, File.mtime(file).strftime("%r %D"), class:"col-xs-4") %>
+    <%= content_tag(:td, filesize_pretty(File.size(file), 2), class:"col-xs-2") %>
+    <%= content_tag(:td, (link_to "<span class='glyphicon glyphicon-download'></span>".html_safe,
+        download_job_path(@job, file: file),
+        class: "btn btn-ftegreen btn-xs",
+        data: { toggle: 'tooltip', placement: 'top' },
+        title: 'Download file',
+        target: '_blank'), class:"col-xs-1") %>
   </tr>
 <% end %>

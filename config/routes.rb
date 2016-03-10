@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       put 'submit'
       put 'kill'
       get 'stdout'
+      get 'download'
     end
   end
 
