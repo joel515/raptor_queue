@@ -9,29 +9,47 @@
     <div class="form-group">
       <%= f.label :config, "Solver", class: "col-sm-2 control-label" %>
       <div class="col-sm-10">
-        <%= f.select :config, Job::SOLVERS.map { |k,v| [v, k.to_s] }, {}, { class: "#{control}" }%>
+        <%= f.select :config, Job::SOLVERS.map { |k,v| [v, k.to_s] }, {},
+          { class: "#{control}" }%>
       </div>
     </div>
     <div class="form-group">
       <%= f.label :nodes, class: "col-sm-2 control-label" %>
       <div class="col-sm-10">
-        <%= f.text_field :nodes, class: "#{control}", placeholder: "Req'd nodes" %>
+        <%= f.text_field :nodes, class: "#{control}",
+          placeholder: "Req'd nodes" %>
       </div>
     </div>
     <div class="form-group">
       <%= f.label :processors, "PPN", class: "col-sm-2 control-label" %>
       <div class="col-sm-10">
-        <%= f.text_field :processors, class: "#{control}", placeholder: "Req'd PPN" %>
+        <%= f.text_field :processors, class: "#{control}",
+          placeholder: "Req'd PPN" %>
       </div>
     </div>
     <div class="form-group">
-      <%= f.label :inputfile, "File", class: "col-sm-2 control-label" %>
-      <div class="col-sm-10">
-        <%= f.file_field :inputfile, class: "#{control}", placeholder: "Input file" %>
-      </div>
+      <%= f.label :inputfile, "Input", class: "col-sm-2 control-label" %>
+      <% if @job.inputfile? %>
+        <div class="col-sm-10" style="padding-bottom:20px;">
+          <%= link_to "<span class='glyphicon glyphicon-remove'></span> "\
+            "#{@job.inputfile_identifier}".html_safe,
+            @job,#@job.remove_inputfile!,
+            method: :delete,
+            class: "btn btn-ftered btn-md",
+            data: { confirm: 'Are you sure?', toggle: 'tooltip',
+              placement: 'top' },
+            title: 'Replace file',
+            target: '_blank' %>
+        </div>
+      <% else %>
+        <div class="col-sm-10">
+          <%= f.file_field :inputfile, class: "#{control}",
+            placeholder: "Input file" %>
+        </div>
+      <% end %>
     </div>
     <div class="form-group">
-      <%= f.submit "Submit", class: "btn btn-primary", data:
+      <%= f.submit yield(:button_text), class: "btn btn-primary", data:
         {disable_with: "Submitting..."} %>
     </div>
 <% end %>

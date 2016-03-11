@@ -38,8 +38,8 @@ class Job < ActiveRecord::Base
   validates_inclusion_of :status, in: JOB_STATUS.values
 
   SOLVERS = {
-    elmer:   "Elmer",
     ansys:   "Ansys",
+    elmer:   "Elmer",
     starccm: "STAR-CCM+"
   }
 

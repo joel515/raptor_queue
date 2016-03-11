@@ -1,7 +1,7 @@
 class JobsController < ApplicationController
   before_action :logged_in_user, only: [:create, :destroy]
   before_action :correct_user,   only: [:destroy]
-  before_action :set_job,        only: [:submit, :kill, :show, :clean]
+  before_action :set_job,        only: [:submit, :kill, :show, :clean, :edit]
 
   def index
     if Job.any?
@@ -16,6 +16,9 @@ class JobsController < ApplicationController
   end
 
   def show
+  end
+
+  def edit
   end
 
   def create
