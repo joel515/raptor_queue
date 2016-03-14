@@ -396,3 +396,15 @@ aside {
   float: left;
   border-bottom-width: 0;
 }
+
+#fileupload {
+  position: relative;
+}
+
+#fileupload .wrapper {
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+}

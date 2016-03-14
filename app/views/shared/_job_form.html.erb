@@ -1,55 +1,47 @@
 <%= form_for(@job, html: { multipart: true }) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
-    <div class="form-group">
-      <%= f.label :name, class: "col-sm-2 control-label" %>
-      <div class="col-sm-10">
-        <%= f.text_field :name, class: "#{control}", placeholder: "Job name" %>
-      </div>
+  <div class="form-group">
+    <%= f.label :name, class: "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :name, class: "#{control}", placeholder: "Job name" %>
     </div>
-    <div class="form-group">
-      <%= f.label :config, "Solver", class: "col-sm-2 control-label" %>
-      <div class="col-sm-10">
-        <%= f.select :config, Job::SOLVERS.map { |k,v| [v, k.to_s] }, {},
-          { class: "#{control}" }%>
-      </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :config, "Solver", class: "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.select :config, Job::SOLVERS.map { |k,v| [v, k.to_s] }, {},
+        { class: "#{control}" }%>
     </div>
-    <div class="form-group">
-      <%= f.label :nodes, class: "col-sm-2 control-label" %>
-      <div class="col-sm-10">
-        <%= f.text_field :nodes, class: "#{control}",
-          placeholder: "Req'd nodes" %>
-      </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :nodes, class: "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :nodes, class: "#{control}",
+        placeholder: "Req'd nodes" %>
     </div>
-    <div class="form-group">
-      <%= f.label :processors, "PPN", class: "col-sm-2 control-label" %>
-      <div class="col-sm-10">
-        <%= f.text_field :processors, class: "#{control}",
-          placeholder: "Req'd PPN" %>
-      </div>
+  </div>
+  <div class="form-group">
+    <%= f.label :processors, "PPN", class: "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :processors, class: "#{control}",
+        placeholder: "Req'd PPN" %>
     </div>
-    <div class="form-group">
-      <%= f.label :inputfile, "Input", class: "col-sm-2 control-label" %>
-      <% if @job.inputfile? %>
-        <div class="col-sm-10" style="padding-bottom:20px;">
-          <%= link_to "<span class='glyphicon glyphicon-remove'></span> "\
-            "#{@job.inputfile_identifier}".html_safe,
-            @job,#@job.remove_inputfile!,
-            method: :delete,
-            class: "btn btn-ftered btn-md",
-            data: { confirm: 'Are you sure?', toggle: 'tooltip',
-              placement: 'top' },
-            title: 'Replace file',
-            target: '_blank' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :inputfile, "Input", class: "col-sm-2 control-label" %>
+
+      <div class="col-sm-10" id="fileupload" style="padding-bottom:20px;">
+        <div class="wrapper">
+        <%= f.file_field :inputfile, class: "#{control}",
+          placeholder: "Input file" %>
         </div>
-      <% else %>
-        <div class="col-sm-10">
-          <%= f.file_field :inputfile, class: "#{control}",
-            placeholder: "Input file" %>
-        </div>
-      <% end %>
-    </div>
-    <div class="form-group">
-      <%= f.submit yield(:button_text), class: "btn btn-primary", data:
-        {disable_with: "Submitting..."} %>
-    </div>
+        <%= button_tag "<span class='glyphicon glyphicon-remove'></span> "\
+          "Select file".html_safe, class: "btn btn-ftegreen btn-md", id: "file-button" %>
+      </div>
+
+  </div>
+  <div class="form-group">
+    <%= f.submit yield(:button_text), class: "btn btn-primary", data:
+      {disable_with: "Submitting..."} %>
+  </div>
 <% end %>
