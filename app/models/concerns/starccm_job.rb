@@ -10,9 +10,9 @@ module StarccmJob
     v1006010R8: "10.06.010-R8"
   }
 
+  # Power on demand environment variable should be set in user's .bashrc file.
   LICPATH = "1999@flex.cd-adapco.com"
-  PODKEY = "***REMOVED***"
-  # VERSION = "10.06.010"
+  PODKEY = `echo $PODKEY`.strip
 
   # Capture the job stats and return the data as a hash.
   def job_stats
@@ -75,6 +75,7 @@ module StarccmJob
     # Elmer format using ElmerGrid, solves using ElmerSolver, then creates
     # 3D visualization plots of the results using Paraview (batch).
     def generate_submit_script(args)
+      debugger
       jobpath = Pathname.new(jobdir)
       simname = File.basename(args[:input_deck],File.extname(args[:input_deck]))
       submit_script = jobpath + "#{prefix}.sh"
