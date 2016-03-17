@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160308162736) do
+ActiveRecord::Schema.define(version: 20160315161435) do
 
   create_table "jobs", force: :cascade do |t|
     t.string   "pid"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20160308162736) do
     t.string   "name"
     t.string   "inputfile"
     t.string   "submitted_at", default: "---"
+    t.string   "version"
   end
 
   add_index "jobs", ["user_id", "created_at"], name: "index_jobs_on_user_id_and_created_at"

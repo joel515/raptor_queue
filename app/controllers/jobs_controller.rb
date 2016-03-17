@@ -1,7 +1,8 @@
 class JobsController < ApplicationController
   before_action :logged_in_user, only: [:create, :destroy]
   before_action :correct_user,   only: [:destroy]
-  before_action :set_job,        only: [:submit, :kill, :show, :clean, :edit]
+  before_action :set_job,        only: [:submit, :kill, :show, :clean, :edit,
+                                        :files]
 
   def index
     if Job.any?
@@ -78,6 +79,13 @@ class JobsController < ApplicationController
     send_file(params[:file], filename: File.basename(params[:file]),
                              disposition: 'attachment',
                              type: 'application/octet-stream')
+  end
+
+  def files
+    @directory = params[:file]
+    respond_to do |format|
+      format.js
+    end
   end
 
   private

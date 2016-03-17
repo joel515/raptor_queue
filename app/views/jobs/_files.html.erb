@@ -1,13 +1,63 @@
-<% Dir["#{job.jobdir}/*"].each do |file| %>
-  <tr>
-    <%= content_tag(:td, File.basename(file), class:"col-xs-5") %>
-    <%= content_tag(:td, File.mtime(file).strftime("%r %D"), class:"col-xs-4") %>
-    <%= content_tag(:td, filesize_pretty(File.size(file), 2), class:"col-xs-2") %>
-    <%= content_tag(:td, (link_to "<span class='glyphicon glyphicon-download-alt'></span>".html_safe,
-        download_job_path(@job, file: file),
-        class: "btn btn-ftegreen btn-xs",
-        data: { toggle: 'tooltip', placement: 'top' },
-        title: 'Download file',
-        target: '_blank'), class:"col-xs-1") %>
-  </tr>
-<% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+      <%= content_tag(:strong, "Files - #{dir}") %>
+  </div>
+  <table class="table table-fixed">
+    <thead>
+      <tr>
+        <th class="col-xs-5">Name</th>
+        <th class="col-xs-4">Date</th>
+        <th class="col-xs-2">Size</th>
+        <th class="col-xs-1"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless dir == @job.jobdir %>
+        <tr>
+          <%= content_tag(:td, (link_to "<span class='glyphicon " \
+              "glyphicon-level-up'>..</span>".html_safe,
+              files_job_path(file: File.expand_path('..', dir)),
+              remote: true,
+              class: "directory",
+              data: { toggle: 'tooltip', placement: 'top' },
+              title: 'Open folder',
+              target: '_blank'), class:"col-xs-5") %>
+          <td class="col-xs-4">---</td>
+          <td class="col-xs-2">---</td>
+          <td class="col-xs-1"></td>
+        </tr>
+      <% end %>
+      <% Dir["#{dir}/*"].sort.each do |file| %>
+        <tr>
+          <% if File.directory?(file) %>
+            <%= content_tag(:td, (link_to "<span class='glyphicon " \
+                "glyphicon-folder-close'></span> #{File.basename(file)}".html_safe,
+                files_job_path(file: file),
+                remote: true,
+                class: "directory",
+                data: { toggle: 'tooltip', placement: 'top' },
+                title: 'Open folder',
+                target: '_blank'), class:"col-xs-5") %>
+            <%= content_tag(:td, File.mtime(file).strftime("%r %D"),
+                                 class:"col-xs-4") %>
+            <td class="col-xs-2">---</td>
+            <td class="col-xs-1"></td>
+          <% else %>
+            <%= content_tag(:td, File.basename(file), class:"col-xs-5") %>
+            <%= content_tag(:td, File.mtime(file).strftime("%r %D"),
+                                 class:"col-xs-4") %>
+            <%= content_tag(:td, filesize_pretty(File.size(file), 2),
+                                 class:"col-xs-2") %>
+            <%= content_tag(:td, (link_to "<span class='glyphicon " \
+                "glyphicon-download-alt'></span>".html_safe,
+                download_job_path(file: file),
+                class: "btn btn-ftegreen btn-xs",
+                data: { toggle: 'tooltip', placement: 'top' },
+                title: 'Download file',
+                target: '_blank'), class:"col-xs-1") %>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

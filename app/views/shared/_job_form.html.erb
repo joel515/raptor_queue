@@ -29,14 +29,17 @@
   </div>
   <div class="form-group">
     <%= f.label :inputfile, "Input", class: "col-sm-2 control-label" %>
-
       <div class="col-sm-10" id="fileupload" style="padding-bottom:20px;">
         <div class="wrapper">
-        <%= f.file_field :inputfile, class: "#{control}",
-          placeholder: "Input file" %>
+        <%= f.file_field :inputfile, class: "#{control}"%>
         </div>
-        <%= button_tag "<span class='glyphicon glyphicon-remove'></span> "\
-          "Select file".html_safe, class: "btn btn-ftegreen btn-md", id: "file-button" %>
+        <% if @job.inputfile? %>
+          <%= button_tag "<span class='glyphicon glyphicon-ok'></span> "\
+            "#{@job.inputfile_identifier}".html_safe, class: "btn btn-ftegreen btn-md", id: "file-button" %>
+        <% else %>
+          <%= button_tag "<span class='glyphicon glyphicon-plus'></span> "\
+            "Select file".html_safe, class: "btn btn-ftered btn-md", id: "file-button" %>
+        <% end %>
       </div>
 
   </div>
@@ -45,3 +48,12 @@
       {disable_with: "Submitting..."} %>
   </div>
 <% end %>
+<script>
+$(document).ready(function(){
+  $("#job_inputfile").change(function(){
+    $("#file-button").text(" " + $("#job_inputfile").val().split('\\').reverse()[0]);
+    $("#file-button").prepend($('<span></span>').addClass('glyphicon glyphicon-ok'));
+    $("#file-button").removeClass("btn btn-ftered btn-md").addClass("btn btn-ftegreen btn-md");
+  });
+});
+</script>

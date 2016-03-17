@@ -16,6 +16,7 @@ class Job < ActiveRecord::Base
                          numericality: { only_integer: true,
                                          greater_than_or_equal_to: 1,
                                          less_than_or_equal_to: 32 }
+  validates_presence_of :inputfile
 
   HOME = "/gpfs/home"
 

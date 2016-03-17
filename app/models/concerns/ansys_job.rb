@@ -1,8 +1,14 @@
 module AnsysJob
   extend ActiveSupport::Concern
-  # validates :inputfile, presence: true
 
-  ANSYS_EXE = "/gpfs/apps/ansys/v162/ansys/bin/ansys162"
+  # Ansys versions - Put latest version last.  It will default to this.
+  VERSIONS = {
+    v150: "15.0",
+    v161: "16.1",
+    v162: "16.2"
+  }
+
+  ANSYS_EXE = "/gpfs/apps/ansys/v---/ansys/bin/ansys---"
 
   # Capture the job stats and return the data as a hash.
   def job_stats
@@ -33,6 +39,7 @@ module AnsysJob
     # Generate the submit script and submit the job using qsub.
     def submit_job
       unless inputfile_identifier.nil?
+        set_version if version.nil?
         submit_script = generate_submit_script(input_deck: inputfile_identifier)
 
         if !submit_script.nil?
@@ -55,6 +62,11 @@ module AnsysJob
       end
     end
 
+    def set_version
+      self.version = AnsysJob::VERSIONS.keys.last.to_s
+      debugger
+    end
+
     # Write the Bash script used to submit the job to the cluster.  The job
     # first generates the geometry and mesh using GMSH, converts the mesh to
     # Elmer format using ElmerGrid, solves using ElmerSolver, then creates
@@ -64,6 +76,10 @@ module AnsysJob
       input_deck = inputfile_identifier
       submit_script = jobpath + "#{prefix}.sh"
       shell_cmd = `which bash`.strip
+
+      exe = ANSYS_EXE.gsub(/---/, version.gsub(/[v]/, ""))
+      debugger
+
       File.open(submit_script, 'w') do |f|
         f.puts "#!#{shell_cmd}"
 
@@ -78,7 +94,7 @@ module AnsysJob
         f.puts "machines=`uniq -c ${PBS_NODEFILE} | " \
           "awk '{print $2 \":\" $1}' | paste -s -d ':'`"
         f.puts "cd ${PBS_O_WORKDIR}"
-        f.puts "#{ANSYS_EXE} -b -dis -machines $machines -i #{input_deck}"
+        f.puts "#{exe} -b -dis -machines $machines -i #{input_deck}"
       end
 
       submit_script.exist? ? submit_script : nil

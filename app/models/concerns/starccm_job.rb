@@ -2,9 +2,17 @@ module StarccmJob
   extend ActiveSupport::Concern
   # validates :inputfile, presence: true
 
+  # STAR-CCM+ versions - Put latest version last.  It will default to this.
+  VERSIONS = {
+    v90611R8:   "9.06.011-R8",
+    v1002012R8: "10.02.012-R8",
+    v1006010:   "10.06.010",
+    v1006010R8: "10.06.010-R8"
+  }
+
   LICPATH = "1999@flex.cd-adapco.com"
   PODKEY = "***REMOVED***"
-  VERSION = "10.06.010"
+  # VERSION = "10.06.010"
 
   # Capture the job stats and return the data as a hash.
   def job_stats
@@ -35,6 +43,7 @@ module StarccmJob
     # Generate the submit script and submit the job using qsub.
     def submit_job
       unless inputfile_identifier.nil?
+        set_version if version.nil?
         submit_script = generate_submit_script(input_deck: inputfile_identifier)
 
         if !submit_script.nil?
@@ -57,6 +66,10 @@ module StarccmJob
       end
     end
 
+    def set_version
+      self.version = StarccmJob::VERSIONS.keys.last.to_s
+    end
+
     # Write the Bash script used to submit the job to the cluster.  The job
     # first generates the geometry and mesh using GMSH, converts the mesh to
     # Elmer format using ElmerGrid, solves using ElmerSolver, then creates
@@ -76,7 +89,7 @@ module StarccmJob
         f.puts "#PBS -m ae"
         f.puts "#PBS -M #{user.email}"
 
-        f.puts "module add starccm+/#{VERSION}"
+        f.puts "module add starccm+/#{StarccmJob::VERSIONS[version.to_sym]}"
         f.puts "numprocs=`wc -l $PBS_NODEFILE | cut -f1 -d \" \"`"
 
         f.puts "cd ${PBS_O_WORKDIR}"

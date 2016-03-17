@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       put 'kill'
       get 'stdout'
       get 'download'
+      get 'files'
     end
   end
 
