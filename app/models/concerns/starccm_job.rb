@@ -75,7 +75,6 @@ module StarccmJob
     # Elmer format using ElmerGrid, solves using ElmerSolver, then creates
     # 3D visualization plots of the results using Paraview (batch).
     def generate_submit_script(args)
-      debugger
       jobpath = Pathname.new(jobdir)
       simname = File.basename(args[:input_deck],File.extname(args[:input_deck]))
       submit_script = jobpath + "#{prefix}.sh"

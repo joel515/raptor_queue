@@ -64,7 +64,6 @@ module AnsysJob
 
     def set_version
       self.version = AnsysJob::VERSIONS.keys.last.to_s
-      debugger
     end
 
     # Write the Bash script used to submit the job to the cluster.  The job
@@ -78,7 +77,6 @@ module AnsysJob
       shell_cmd = `which bash`.strip
 
       exe = ANSYS_EXE.gsub(/---/, version.gsub(/[v]/, ""))
-      debugger
 
       File.open(submit_script, 'w') do |f|
         f.puts "#!#{shell_cmd}"
