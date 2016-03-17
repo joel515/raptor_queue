@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get 'login'     => 'sessions#new'
   post 'login'    => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
+  get 'jobs/version', as: 'version'
   resources :users
   resources :jobs do
     member do

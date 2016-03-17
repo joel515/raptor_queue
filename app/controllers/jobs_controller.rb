@@ -2,7 +2,7 @@ class JobsController < ApplicationController
   before_action :logged_in_user, only: [:create, :destroy]
   before_action :correct_user,   only: [:destroy]
   before_action :set_job,        only: [:submit, :kill, :show, :clean, :edit,
-                                        :files]
+                                        :files, :version]
 
   def index
     if Job.any?
@@ -24,6 +24,7 @@ class JobsController < ApplicationController
 
   def create
     @job = current_user.jobs.build(job_params)
+    debugger
     if @job.save
       submit_job
     else
@@ -83,6 +84,16 @@ class JobsController < ApplicationController
 
   def files
     @directory = params[:file]
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def version
+    @config = @job.config
+    @form = form_for(@job, html: { multipart: true }, remote: true)
+    @control = params[:control]
+    debugger
     respond_to do |format|
       format.js
     end

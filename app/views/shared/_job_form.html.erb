@@ -1,4 +1,4 @@
-<%= form_for(@job, html: { multipart: true }) do |f| %>
+<%= form_for(@job, html: { multipart: true }, remote: true) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
   <div class="form-group">
     <%= f.label :name, class: "col-sm-2 control-label" %>
@@ -13,6 +13,16 @@
         { class: "#{control}" }%>
     </div>
   </div>
+  <% if advanced %>
+    <div class="form-group">
+      <%= f.label :version, class: "col-sm-2 control-label" %>
+      <div class="col-sm-10" id="version">
+        <%= render 'shared/version', config: @job.config,
+                                     control: control,
+                                     form: f %>
+      </div>
+    </div>
+  <% end %>
   <div class="form-group">
     <%= f.label :nodes, class: "col-sm-2 control-label" %>
     <div class="col-sm-10">
