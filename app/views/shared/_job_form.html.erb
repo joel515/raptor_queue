@@ -13,6 +13,19 @@
         { class: "#{control}" }%>
     </div>
   </div>
+  <% unless params[:action] == "home" %>
+    <div class="form-group">
+      <%= f.label :version, class: "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+        <% if @job.config.nil? %>
+          <%= f.select :version, {}, {}, { class: "#{control}", disabled: true } %>
+        <% else %>
+          <%= f.select :version, eval("#{@job.config.capitalize}Job::VERSIONS.map " \
+            "{ |k,v| [v, k.to_s] }"), {}, { class: "#{control}" }%>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
   <div class="form-group">
     <%= f.label :nodes, class: "col-sm-2 control-label" %>
     <div class="col-sm-10">
