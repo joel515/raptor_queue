@@ -40,7 +40,6 @@ class Job < ActiveRecord::Base
 
   SOLVERS = {
     ansys:   "Ansys",
-    elmer:   "Elmer",
     starccm: "STAR-CCM+"
   }
 
@@ -56,7 +55,7 @@ class Job < ActiveRecord::Base
     when "ansys"
       extend AnsysJob
     else
-      extend ElmerJob
+      extend AnsysJob
     end
   end
 

@@ -1,0 +1,6 @@
+<% if @job.config.nil? %>
+  <%= f.select :version, {}, {}, { class: "#{control}", disabled: true } %>
+<% else %>
+  <%= f.select :version, eval("#{@job.config.capitalize}Job::VERSIONS.map " \
+    "{ |k,v| [v, k.to_s] }"), {}, { class: "#{control}" }%>
+<% end %>
