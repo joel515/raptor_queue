@@ -88,6 +88,16 @@ class JobsController < ApplicationController
     end
   end
 
+  def change_config
+    @control = params[:control]
+    @config = params[:config]
+    @form = params[:form]
+    debugger
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
 
     def job_params

@@ -1,6 +1,9 @@
-<% if @job.config.nil? %>
-  <%= f.select :version, {}, {}, { class: "#{control}", disabled: true } %>
+<% config = @job.config if config.nil? %>
+<% if config.nil? %>
+  <%= form.select :version, {}, { prompt: "Select version" },
+    { class: "#{control}", disabled: true } %>
 <% else %>
-  <%= f.select :version, eval("#{@job.config.capitalize}Job::VERSIONS.map " \
-    "{ |k,v| [v, k.to_s] }"), {}, { class: "#{control}" }%>
+  <%= form.select :version, eval("#{@job.config.capitalize}Job::VERSIONS.map " \
+    "{ |k,v| [v, k.to_s] }"), { prompt: "Select version" },
+    { class: "#{control}" }%>
 <% end %>
