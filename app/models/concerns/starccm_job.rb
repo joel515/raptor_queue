@@ -2,12 +2,12 @@ module StarccmJob
   extend ActiveSupport::Concern
   # validates :inputfile, presence: true
 
-  # STAR-CCM+ versions - Put latest version last.  It will default to this.
+  # STAR-CCM+ versions - Put latest version first.  It will default to this.
   VERSIONS = {
-    v90611R8:   "9.06.011-R8",
-    v1002012R8: "10.02.012-R8",
+    v1006010R8: "10.06.010-R8",
     v1006010:   "10.06.010",
-    v1006010R8: "10.06.010-R8"
+    v1002012R8: "10.02.012-R8",
+    v90611R8:   "9.06.011-R8"
   }
 
   # Power on demand environment variable should be set in user's .bashrc file.
@@ -67,7 +67,7 @@ module StarccmJob
     end
 
     def set_version
-      self.version = StarccmJob::VERSIONS.keys.last.to_s
+      self.version = StarccmJob::VERSIONS.keys.first.to_s
     end
 
     # Write the Bash script used to submit the job to the cluster.  The job

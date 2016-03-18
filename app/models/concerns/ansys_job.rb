@@ -1,11 +1,11 @@
 module AnsysJob
   extend ActiveSupport::Concern
 
-  # Ansys versions - Put latest version last.  It will default to this.
+  # Ansys versions - Put latest version first.  It will default to this.
   VERSIONS = {
-    v150: "15.0",
+    v162: "16.2",
     v161: "16.1",
-    v162: "16.2"
+    v150: "15.0"
   }
 
   ANSYS_EXE = "/gpfs/apps/ansys/v---/ansys/bin/ansys---"
@@ -63,7 +63,7 @@ module AnsysJob
     end
 
     def set_version
-      self.version = AnsysJob::VERSIONS.keys.last.to_s
+      self.version = AnsysJob::VERSIONS.keys.first.to_s
     end
 
     # Write the Bash script used to submit the job to the cluster.  The job
