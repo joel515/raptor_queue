@@ -44,7 +44,7 @@ class Job < ActiveRecord::Base
     starccm: "STAR-CCM+"
   }
 
-  validates_inclusion_of :config, in: SOLVERS.keys.map(&:to_s)
+  # validates_inclusion_of :config, in: SOLVERS.keys.map(&:to_s)
 
   MAX_PPN = 16
   MAX_NODE = 32

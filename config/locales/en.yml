@@ -24,9 +24,12 @@ en:
     attributes:
       job:
         inputfile: "Input deck/file"
+        config: "Solver"
     errors:
       models:
         job:
           attributes:
             inputfile:
               blank: "is required"
+            config:
+              blank: "must be selected"
