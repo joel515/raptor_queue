@@ -91,7 +91,7 @@ class JobsController < ApplicationController
 
   def version
     @config = @job.config
-    @form = form_for(@job, html: { multipart: true }, remote: true)
+    @form = params[:form]
     @control = params[:control]
     debugger
     respond_to do |format|

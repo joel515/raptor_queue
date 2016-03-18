@@ -67,3 +67,18 @@ $(document).ready(function(){
   });
 });
 </script>
+<script>
+$(document).ready(function(){
+  $("#job_config").change(function(){
+    alert("change!");
+    $.ajax({
+      url: "<%= version_path %>",
+      data: {
+        control: <%= control %>,
+        form: $(this.form)
+      },
+      dataType: "script"
+    });
+  });
+});
+</script>
