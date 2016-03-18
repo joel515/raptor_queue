@@ -191,6 +191,10 @@ class Job < ActiveRecord::Base
     jobpath + "#{prefix}.o#{pid.split('.')[0]}"
   end
 
+  def get_version
+    eval("#{config.capitalize}Job::VERSIONS[version.to_sym]")
+  end
+
   private
 
     def create_staging_directories!

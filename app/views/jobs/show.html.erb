@@ -10,6 +10,7 @@
         <thead>
           <tr>
             <th>Solver</th>
+            <th>Version</th>
             <th>Nodes</th>
             <th>PPN</th>
             <th>Job id</th>
@@ -19,6 +20,7 @@
         <tbody>
           <tr>
             <td><%= Job::SOLVERS[@job.config.to_sym] %></td>
+            <td><%= @job.get_version %></td>
             <td><%= @job.nodes %></td>
             <td><%= @job.processors %></td>
             <td><%= @job.id %></td>
