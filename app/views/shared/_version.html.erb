@@ -3,7 +3,7 @@
   <%= form.select :version, {}, { prompt: "Select version" },
     { class: "#{control}", disabled: true } %>
 <% else %>
-  <%= form.select :version, eval("#{@job.config.capitalize}Job::VERSIONS.map " \
+  <%= form.select :version, eval("#{config.capitalize}Job::VERSIONS.map " \
     "{ |k,v| [v, k.to_s] }"), { prompt: "Select version" },
     { class: "#{control}" }%>
 <% end %>

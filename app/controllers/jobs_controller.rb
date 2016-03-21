@@ -24,6 +24,7 @@ class JobsController < ApplicationController
 
   def create
     @job = current_user.jobs.build(job_params)
+    debugger
     if @job.save
       submit_job
     else
@@ -88,11 +89,10 @@ class JobsController < ApplicationController
     end
   end
 
-  def change_config
-    @control = params[:control]
+  def update_versions
+    @control = "form-control"
     @config = params[:config]
-    @form = params[:form]
-    debugger
+    @job = params[:job]
     respond_to do |format|
       format.js
     end
@@ -102,7 +102,7 @@ class JobsController < ApplicationController
 
     def job_params
       params.require(:job).permit(:name, :nodes, :processors, :config,
-                                  :inputfile)
+                                  :inputfile, :version)
     end
 
     def set_job

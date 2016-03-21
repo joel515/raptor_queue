@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   get 'login'     => 'sessions#new'
   post 'login'    => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
-  get 'jobs/change_config', as: 'change_config'
+  get 'jobs/update_versions', as: 'update_versions'
   resources :users
   resources :jobs do
     member do
