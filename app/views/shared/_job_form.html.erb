@@ -18,7 +18,14 @@
     <div class="form-group">
       <%= f.label :version, class: "col-sm-2 control-label" %>
       <div class="col-sm-10" id="version">
-        <%= render 'shared/version', control: control, form: f %>
+        <% if @job.config.nil? %>
+          <%= f.select :version, {}, { prompt: "Select version" },
+            { class: "#{control}", disabled: true } %>
+        <% else %>
+          <%= f.select :version, eval("#{@job.config.capitalize}Job::VERSIONS.map " \
+            "{ |k,v| [v, k.to_s] }"), { prompt: "Select version" },
+            { class: "#{control}" }%>
+        <% end %>
       </div>
     </div>
   <% end %>
@@ -57,26 +64,3 @@
       {disable_with: "Submitting..."} %>
   </div>
 <% end %>
-<script>
-$(document).ready(function(){
-  $("#job_inputfile").change(function(){
-    $("#file-button").text(" " + $("#job_inputfile").val().split('\\').reverse()[0]);
-    $("#file-button").prepend($('<span></span>').addClass('glyphicon glyphicon-ok'));
-    $("#file-button").removeClass("btn btn-ftered btn-md").addClass("btn btn-ftegreen btn-md");
-  });
-});
-</script>
-<script>
-$(document).ready(function(){
-  $("#job_config").change(function(){
-    $.ajax({
-      url: "<%= update_versions_path %>",
-      data: {
-        config: $("#job_config option:selected").val(),
-        job: "<%= @job %>"
-      },
-      dataType: "script"
-    });
-  });
-});
-</script>

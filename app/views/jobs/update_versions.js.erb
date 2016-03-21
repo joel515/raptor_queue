@@ -1,3 +1,8 @@
-'<%= form_for(@job) do |ff| %>'
-  $('#version').html("<%= escape_javascript(render('shared/version', config: @config, form: ff, control: @control)) %>")
-'<% end %>'
+$('#job_version').empty()
+<% if @config.empty? %>
+  .prop('disabled', true)
+  .append("<option value=\"\">Select version</option>");
+<% else %>
+  .prop('disabled', false)
+  .append("<%= escape_javascript(render('shared/version', config: @config)) %>");
+<% end %>

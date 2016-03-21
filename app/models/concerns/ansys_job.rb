@@ -38,7 +38,6 @@ module AnsysJob
 
     # Generate the submit script and submit the job using qsub.
     def submit_job
-      debugger
       unless inputfile_identifier.nil?
         set_version if version.nil?
         submit_script = generate_submit_script(input_deck: inputfile_identifier)
