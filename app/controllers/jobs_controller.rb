@@ -2,7 +2,7 @@ class JobsController < ApplicationController
   before_action :logged_in_user, only: [:create, :destroy]
   before_action :correct_user,   only: [:destroy]
   before_action :set_job,        only: [:submit, :kill, :show, :clean, :edit,
-                                        :files]
+                                        :files, :update, :copy]
 
   def index
     if Job.any?
@@ -32,10 +32,25 @@ class JobsController < ApplicationController
     end
   end
 
+  def update
+    if @job.editable?
+      if @job.update_attributes(job_params)
+        @job.clean_staging_directories if @job.cleanable?
+        @job.ready
+        submit_job
+      else
+        render 'edit'
+      end
+    else
+      flash[:danger] = "#{@job.name} is not editable at this time."
+      render 'edit'
+    end
+  end
+
   def destroy
     @job.destroy
     flash[:success] = "Job deleted."
-    redirect_to request.referrer || root_url
+    redirect_to root_url
   end
 
   def submit
@@ -57,6 +72,13 @@ class JobsController < ApplicationController
   end
 
   def copy
+    duplicate_job = @job.duplicate
+    if duplicate_job.save
+      redirect_to duplicate_job
+    else
+      flash[:danger] = "Unable to copy #{@job.name}."
+      redirect_to request.referrer
+    end
   end
 
   def clean

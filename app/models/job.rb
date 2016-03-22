@@ -43,7 +43,7 @@ class Job < ActiveRecord::Base
     starccm: "STAR-CCM+"
   }
 
-  # validates_inclusion_of :config, in: SOLVERS.keys.map(&:to_s)
+  validates_inclusion_of :config, in: SOLVERS.keys.map(&:to_s)
 
   MAX_PPN = 16
   MAX_NODE = 32
@@ -192,6 +192,15 @@ class Job < ActiveRecord::Base
 
   def get_version
     eval("#{config.capitalize}Job::VERSIONS[version.to_sym]")
+  end
+
+  def duplicate
+    duplicate_job = self.dup
+    duplicate_job.jobdir = nil
+    duplicate_job.submitted_at = "---"
+    duplicate_job.inputfile = inputfile
+    duplicate_job.ready
+    duplicate_job
   end
 
   private
