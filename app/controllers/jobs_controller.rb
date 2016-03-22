@@ -74,7 +74,7 @@ class JobsController < ApplicationController
   def copy
     duplicate_job = @job.duplicate
     if duplicate_job.save
-      redirect_to duplicate_job
+      redirect_to root_url
     else
       flash[:danger] = "Unable to copy #{@job.name}."
       redirect_to request.referrer
@@ -90,11 +90,7 @@ class JobsController < ApplicationController
       flash[:danger] = "Job cannot be cleaned at this time."
     end
 
-    # if request.referrer.include? results_beam_path
-    #   redirect_to @job
-    # else
-      redirect_to request.referrer || index_url
-    # end
+    redirect_to request.referrer
   end
 
   def download
