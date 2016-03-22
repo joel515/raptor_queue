@@ -27,7 +27,7 @@ class JobsController < ApplicationController
     if @job.save
       submit_job
     else
-      @feed_items = []
+      @feed_items = current_user.feed.order(:created_at).page params[:page]
       render 'static_pages/home'
     end
   end
